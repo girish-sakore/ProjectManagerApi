@@ -1,0 +1,30 @@
+[
+  {
+    "email": "max@f1.com",
+    "password": "123456789",
+    "number": "1324657981",
+    "firstName": "Max",
+    "lastName": "Verstappen"
+  },
+  {
+    "email": "lewis@f1.com",
+    "password": "123456789",
+    "number": "7987987988",
+    "firstName": "Lewis",
+    "lastName": "Hamilton"
+  },
+  {
+    "email": "lando@f1.com",
+    "password": "123456789",
+    "number": "6549871320",
+    "firstName": "Lando",
+    "lastName": "Norris"
+  },
+  {
+    "email": "daniel@f1.com",
+    "password": "123456789",
+    "number": "6549871234",
+    "firstName": "Daniel",
+    "lastName": "Ricciardo"
+  }
+]
