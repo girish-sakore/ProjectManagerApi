@@ -33,26 +33,27 @@ public class AppUserService implements UserDetailsService {
     }
     @Async
     public String signUpUser(AppUser appUser){
-        Optional<AppUser> userExists = appUserRepository.findByEmail(appUser.getEmail());
-        LOGGER.warn("----------------------inside register------------------------");
-        if(userExists.isPresent()){
-            Optional<ConfirmationToken> tokenConfirmed = confirmationTokenService.findConfirmedAppUser(appUser);
-//            returns ConfirmationToken only if the email is confirmed
-            LOGGER.warn("----------------------user present------------------------");
-            if(tokenConfirmed.isPresent()) {
-                throw new IllegalStateException("Email already Taken");
+        Optional<AppUser> existingUser = appUserRepository.findByEmail(appUser.getEmail());
+        if(existingUser.isPresent()){ // User exist
+            Optional<ConfirmationToken> currentUserToken = confirmationTokenService.isUserConfirmed(appUser.getEmail());
+            if(currentUserToken.isPresent()) { // User token is not confirmed
+                if(confirmationTokenService.isTokenExpired(currentUserToken)) { // User token is expired
+                    confirmationTokenRepository.deleteById(currentUserToken.get().getId());
+                    LOGGER.info("Token was expired and deleted");
+                    appUser = existingUser.get();
+                } else { // User token not expired
+                    return "Email already registered. Check your email for verification";
+                }
+            } else { // User token already confirmed
+                return "Email already taken";
             }
-            LOGGER.warn("----------------------user present but not confirmed------------------------");
-            confirmationTokenRepository.deleteById(tokenConfirmed.get().getId());
-            LOGGER.warn("-------------------------------check 1--------------------------------------");
-            appUserRepository.deleteByEmail(userExists.get().getEmail());
-            LOGGER.warn("-------------------------------check 2--------------------------------------");
+        } else { // User not exist (New User)
+            String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
+            appUser.setPassword(encodedPassword);
+            appUserRepository.save(appUser);
         }
-        String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
-        appUser.setPassword(encodedPassword);
-        appUserRepository.save(appUser);
+        // Generating token
         String token = UUID.randomUUID().toString();
-
         ConfirmationToken confirmationToken = new ConfirmationToken(
             token,
             LocalDateTime.now(),
@@ -60,6 +61,7 @@ public class AppUserService implements UserDetailsService {
             appUser
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
+        LOGGER.info("Token generated");
         return token;
     }
 

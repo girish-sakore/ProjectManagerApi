@@ -88,6 +88,9 @@ public class AppUser implements UserDetails {
                 + number + "\n"
                 + firstName + "\n"
                 + lastName + "\n"
-                + appUserRole;
+                + appUserRole + "\n"
+                + "Enabled:" + enabled + "\n"
+                + "Locked:" + locked + "\n";
+
     }
 }

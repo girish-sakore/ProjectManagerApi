@@ -7,6 +7,8 @@ import com.gsoft.projectManager.mailer.EmailSender;
 import com.gsoft.projectManager.registration.token.ConfirmationToken;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,8 @@ public class RegistrationService {
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
+
+    public final Logger LOGGER = LoggerFactory.getLogger(RegistrationService.class);
 
     public String register(RegistrationRequest request) {
         boolean isEmailValid = emailValidator.test(request.getEmail());
@@ -43,6 +47,7 @@ public class RegistrationService {
                     link
                 )
         );
+        LOGGER.info("Registration email sent");
         return token;
     }
 
@@ -62,8 +67,8 @@ public class RegistrationService {
         appUserService.enableAppUser(
                 confirmationToken.getAppUser().getEmail()
         );
-
-        return "Confirmed";
+        LOGGER.info(confirmationToken.getAppUser().getEmail() + " User enabled");
+        return "Your email is Verified.";
     }
     private String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +

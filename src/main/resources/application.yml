@@ -2,6 +2,7 @@ Spring:
   output:
     ansi:
       enabled: always
+
   datasource:
     url: jdbc:mysql://localhost:3306/projectManager
     username: root
@@ -30,3 +31,10 @@ Spring:
 #          connectiontimeout: 5000
 #          timeout: 3000
 #          writetimeout: 5000
+
+#  file:
+#    name: projectManagerLog.log
+#  pattern:
+#    console: %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+#logging:
+#  level: debug
