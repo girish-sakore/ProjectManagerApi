@@ -2,7 +2,6 @@ package com.gsoft.projectManager.appuser;
 
 import com.gsoft.projectManager.mailer.EmailSender;
 import com.gsoft.projectManager.mailer.EmailService;
-import com.gsoft.projectManager.registration.RegistrationService;
 import com.gsoft.projectManager.registration.token.ConfirmationToken;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenRepository;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
@@ -16,9 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -52,7 +49,7 @@ public class AppUserService implements UserDetailsService {
                 if (confirmationTokenService.isTokenExpired(currentUserToken)) { // User token is expired
                     confirmationTokenRepository.deleteById(currentUserToken.get().getId());
                     LOGGER.info("Token was expired and deleted");
-                    appUser = existingUser.get();
+                    newUser = existingUser.get();
                 } else { // User token not expired
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already registered. Check your email for verification");
                 }
@@ -70,15 +67,15 @@ public class AppUserService implements UserDetailsService {
                 token,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusMinutes(15),
-                appUser
+                newUser
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
         LOGGER.info("Token generated: " + token);
         String baseURI = "http://localhost:3000";
         String link = baseURI + "/api/v1/register/confirm?token=" + token;
-        emailSender.send(appUser.getEmail(),
+        emailSender.send(newUser.getEmail(),
                 emailService.buildEmail(
-                        appUser.getFirstName(),
+                        newUser.getFirstName(),
                         link
                 )
         );
