@@ -38,3 +38,8 @@ Spring:
 #    console: %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
 #logging:
 #  level: debug
+
+server:
+  port: 3000
+  error:
+    include-message: always

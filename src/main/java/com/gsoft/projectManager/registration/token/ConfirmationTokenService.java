@@ -5,7 +5,9 @@ import com.gsoft.projectManager.appuser.AppUserRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -38,7 +40,7 @@ public class ConfirmationTokenService {
                 return token;
             }
         } else { // Token not found
-            throw new IllegalStateException("AppUser has no entry in ConfirmationToken");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "AppUser has no entry in ConfirmationToken. To resolve the issue Contact Admin!!");
         }
     }
 

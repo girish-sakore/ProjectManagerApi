@@ -26,5 +26,33 @@
     "number": "6549871234",
     "firstName": "Daniel",
     "lastName": "Ricciardo"
+  },
+  {
+    "email": "sergio@f1.com",
+    "password": "123456789",
+    "number": "9879879877",
+    "firstName": "Sergio",
+    "lastName": "Perez"
+  },
+  {
+    "email": "kimi@f1.com",
+    "password": "123456789",
+    "number": "9879879873",
+    "firstName": "Kimi",
+    "lastName": "Raikonnen"
+  },
+  {
+    "email": "seb@f1.com",
+    "password": "123456789",
+    "number": "9879879878",
+    "firstName": "Sebastian",
+    "lastName": "Vettel"
+  },
+  {
+    "email": "fernando@f1.com",
+    "password": "123456789",
+    "number": "9879879874",
+    "firstName": "Fernando",
+    "lastName": "Alonso"
   }
 ]
