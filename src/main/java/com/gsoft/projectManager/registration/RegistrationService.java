@@ -1,11 +1,13 @@
 package com.gsoft.projectManager.registration;
 
+import java.time.LocalDateTime;
+
 import com.gsoft.projectManager.appuser.AppUser;
 import com.gsoft.projectManager.appuser.AppUserRole;
 import com.gsoft.projectManager.appuser.AppUserService;
 import com.gsoft.projectManager.registration.token.ConfirmationToken;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
-import lombok.AllArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -34,11 +36,12 @@ public class RegistrationService {
         return appUserService.signUpUser(
                 new AppUser(
                         request.getEmail(),
+                        request.getUsername(),
                         request.getPassword(),
                         request.getNumber(),
                         request.getFirstName(),
                         request.getLastName(),
-                        AppUserRole.DEV
+                        AppUserRole.DEV // change it to user role
                 )
         );
     }
