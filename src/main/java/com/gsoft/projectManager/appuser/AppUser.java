@@ -1,13 +1,24 @@
 package com.gsoft.projectManager.appuser;
 
-import lombok.*;
+import java.util.Collection;
+import java.util.Collections;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -24,6 +35,7 @@ public class AppUser implements UserDetails {
     private String firstName;
     private String lastName;
     private String password;
+    private String username;
 
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
@@ -31,12 +43,14 @@ public class AppUser implements UserDetails {
     private Boolean enabled = false;
 
     public AppUser(String email,
+                   String username,
                    String password,
                    String number,
                    String firstName,
                    String lastName,
                    AppUserRole appUserRole) {
         this.email = email;
+        this.username = username;
         this.password = password;
         this.number = number;
         this.firstName = firstName;
@@ -57,7 +71,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

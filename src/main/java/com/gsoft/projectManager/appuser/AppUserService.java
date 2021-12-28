@@ -1,11 +1,15 @@
 package com.gsoft.projectManager.appuser;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.gsoft.projectManager.mailer.EmailSender;
 import com.gsoft.projectManager.mailer.EmailService;
 import com.gsoft.projectManager.registration.token.ConfirmationToken;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenRepository;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
-import lombok.AllArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,9 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -35,8 +37,12 @@ public class AppUserService implements UserDetailsService {
     private final Logger LOGGER = LoggerFactory.getLogger(AppUserService.class);
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return appUserRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
+    public UserDetails loadUserByUsername(String emailOrUsername) throws UsernameNotFoundException {
+        Optional<AppUser> optionalUser = appUserRepository.findByUsername(emailOrUsername);
+        
+        if(optionalUser.isPresent()) return optionalUser.get();
+        return appUserRepository.findByEmail(emailOrUsername)
+                                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, emailOrUsername)));
     }
 
     @Async
@@ -71,7 +77,7 @@ public class AppUserService implements UserDetailsService {
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
         LOGGER.info("Token generated: " + token);
-        String baseURI = "http://localhost:3000";
+        String baseURI = "http://localhost:3000"; // temp
         String link = baseURI + "/api/v1/register/confirm?token=" + token;
         emailSender.send(newUser.getEmail(),
                 emailService.buildEmail(
