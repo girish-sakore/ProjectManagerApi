@@ -1,8 +1,8 @@
 package com.gsoft.projectManager.appuser.login;
 import java.util.Date;
 
-import com.gsoft.projectManager.appuser.AppUser;
 import com.gsoft.projectManager.appuser.AppUserService;
+import com.gsoft.projectManager.appuser.UserPrincipal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class JwtTokenProvider {
     private AppUserService appUserService;
 
     public String generateJwtToken(Authentication authentication){
-        AppUser userPrincipal = (AppUser) appUserService.loadUserByUsername((String) authentication.getPrincipal());
+        UserPrincipal userPrincipal = (UserPrincipal) appUserService.loadUserByUsername((String) authentication.getPrincipal());
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 

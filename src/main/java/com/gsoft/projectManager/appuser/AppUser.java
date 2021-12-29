@@ -1,18 +1,15 @@
 package com.gsoft.projectManager.appuser;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -26,7 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class AppUser implements UserDetails {
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,8 +34,11 @@ public class AppUser implements UserDetails {
     private String password;
     private String username;
 
-    @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name="user_role", joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"), 
+               inverseJoinColumns=@JoinColumn(name="role_id", referencedColumnName="id"))
+    private List<Role> roles;
+
     private Boolean locked = false;
     private Boolean enabled = false;
 
@@ -48,48 +48,36 @@ public class AppUser implements UserDetails {
                    String number,
                    String firstName,
                    String lastName,
-                   AppUserRole appUserRole) {
+                   List<Role> roles) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.number = number;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.appUserRole = appUserRole;
+        this.roles = roles;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
-        return Collections.singletonList(authority);
-    }
-
-    @Override
     public String getPassword() {
         return password;
     }
 
-    @Override
     public String getUsername() {
         return username;
     }
 
-    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @Override
     public boolean isAccountNonLocked() {
         return !locked;
     }
 
-    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    @Override
     public boolean isEnabled() {
         return enabled;
     }
@@ -102,7 +90,7 @@ public class AppUser implements UserDetails {
                 + number + "\n"
                 + firstName + "\n"
                 + lastName + "\n"
-                + appUserRole + "\n"
+                + roles.toString() + "\n"
                 + "Enabled:" + enabled + "\n"
                 + "Locked:" + locked + "\n";
 

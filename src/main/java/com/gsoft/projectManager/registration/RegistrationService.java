@@ -1,10 +1,12 @@
 package com.gsoft.projectManager.registration;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import com.gsoft.projectManager.appuser.AppUser;
-import com.gsoft.projectManager.appuser.AppUserRole;
 import com.gsoft.projectManager.appuser.AppUserService;
+import com.gsoft.projectManager.appuser.RoleService;
+import com.gsoft.projectManager.appuser.Rolename;
 import com.gsoft.projectManager.registration.token.ConfirmationToken;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
 
@@ -23,6 +25,7 @@ public class RegistrationService {
     private final AppUserService appUserService;
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
+    private final RoleService roleService;
 
     public final Logger LOGGER = LoggerFactory.getLogger(RegistrationService.class);
 
@@ -41,7 +44,7 @@ public class RegistrationService {
                         request.getNumber(),
                         request.getFirstName(),
                         request.getLastName(),
-                        AppUserRole.DEV // change it to user role
+                        Arrays.asList(roleService.findOrCreateRole(Rolename.ROLE_USER))
                 )
         );
     }

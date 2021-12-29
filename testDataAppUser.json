@@ -4,55 +4,63 @@
     "password": "123456789",
     "number": "1324657981",
     "firstName": "Max",
-    "lastName": "Verstappen"
+    "lastName": "Verstappen",
+    "username": "max"
   },
   {
     "email": "lewis@f1.com",
     "password": "123456789",
     "number": "7987987988",
     "firstName": "Lewis",
-    "lastName": "Hamilton"
+    "lastName": "Hamilton",
+    "username": "lewton"
   },
   {
     "email": "lando@f1.com",
     "password": "123456789",
     "number": "6549871320",
     "firstName": "Lando",
-    "lastName": "Norris"
+    "lastName": "Norris",
+    "username": "landoris"
   },
   {
     "email": "daniel@f1.com",
     "password": "123456789",
     "number": "6549871234",
     "firstName": "Daniel",
-    "lastName": "Ricciardo"
+    "lastName": "Ricciardo",
+    "username": "dando"
   },
   {
     "email": "sergio@f1.com",
     "password": "123456789",
     "number": "9879879877",
     "firstName": "Sergio",
-    "lastName": "Perez"
+    "lastName": "Perez",
+    "username": "serez"
   },
   {
     "email": "kimi@f1.com",
     "password": "123456789",
     "number": "9879879873",
     "firstName": "Kimi",
-    "lastName": "Raikonnen"
+    "lastName": "Raikonnen",
+    "username": "kimnen"
   },
   {
     "email": "seb@f1.com",
     "password": "123456789",
     "number": "9879879878",
     "firstName": "Sebastian",
-    "lastName": "Vettel"
+    "lastName": "Vettel",
+    "username": "sebtel"
   },
   {
     "email": "fernando@f1.com",
     "password": "123456789",
     "number": "9879879874",
     "firstName": "Fernando",
-    "lastName": "Alonso"
+    "lastName": "Alonso",
+    "username": "ferso"
   }
 ]

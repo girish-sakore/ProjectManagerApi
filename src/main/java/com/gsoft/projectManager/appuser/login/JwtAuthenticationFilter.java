@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.gsoft.projectManager.appuser.AppUser;
 import com.gsoft.projectManager.appuser.AppUserRepository;
+import com.gsoft.projectManager.appuser.UserPrincipal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 Optional<AppUser> optionalAppUser = appUserRepository.findById(userId);
     
                 if(optionalAppUser.isPresent()){
-                    AppUser user = optionalAppUser.get();
+                    UserPrincipal user = UserPrincipal.create(optionalAppUser.get());
+                    
                     Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), 
                                                                                             user.getPassword(),
                                                                                             user.getAuthorities());    
