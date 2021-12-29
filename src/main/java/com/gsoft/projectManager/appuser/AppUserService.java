@@ -14,6 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -91,5 +94,31 @@ public class AppUserService implements UserDetailsService {
 
     public void enableAppUser(String email) {
         appUserRepository.enableAppUser(email);
+    }
+
+    public Authentication loginUser(Optional<AppUser> optionalAppUser){
+        if(optionalAppUser.isPresent()){
+            AppUser appUser = optionalAppUser.get();
+            if(!appUser.isEnabled()){
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is disabled!");
+            }
+            else if(!appUser.isAccountNonLocked()){
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is locked!");
+            }
+            else if(!appUser.isAccountNonExpired()){
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is expired!");
+            }
+            else if(!appUser.isCredentialsNonExpired()){
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account credentials are expired!");
+            }
+            UserPrincipal user = UserPrincipal.create(optionalAppUser.get());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), 
+                                                                                    user.getPassword(),
+                                                                                    user.getAuthorities());    
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            LOGGER.info("User signed in successfully!");
+            return authentication;
+        }
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to login!");
     }
 }
