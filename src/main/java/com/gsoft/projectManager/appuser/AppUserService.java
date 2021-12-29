@@ -39,10 +39,10 @@ public class AppUserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String emailOrUsername) throws UsernameNotFoundException {
         Optional<AppUser> optionalUser = appUserRepository.findByUsername(emailOrUsername);
-        
-        if(optionalUser.isPresent()) return optionalUser.get();
-        return appUserRepository.findByEmail(emailOrUsername)
-                                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, emailOrUsername)));
+        if(optionalUser.isPresent()) return UserPrincipal.create(optionalUser.get());
+        optionalUser = appUserRepository.findByEmail(emailOrUsername);
+        if(optionalUser.isPresent()) return UserPrincipal.create(optionalUser.get());
+        throw new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, emailOrUsername));
     }
 
     @Async
