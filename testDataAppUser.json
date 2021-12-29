@@ -5,17 +5,15 @@
     "password": "123456789",
     "number": "1324657981",
     "firstName": "Max",
-    "lastName": "Verstappen",
-    "username": "max"
+    "lastName": "Verstappen"
   },
   {
     "email": "lewis@f1.com",
-    "username": "legend",
+    "username": "lewton",
     "password": "123456789",
     "number": "7987987988",
     "firstName": "Lewis",
-    "lastName": "Hamilton",
-    "username": "lewton"
+    "lastName": "Hamilton"
   },
   {
     "email": "lando@f1.com",
@@ -23,8 +21,7 @@
     "password": "123456789",
     "number": "6549871320",
     "firstName": "Lando",
-    "lastName": "Norris",
-    "username": "landoris"
+    "lastName": "Norris"
   },
   {
     "email": "daniel@f1.com",
@@ -32,8 +29,7 @@
     "password": "123456789",
     "number": "6549871234",
     "firstName": "Daniel",
-    "lastName": "Ricciardo",
-    "username": "dando"
+    "lastName": "Ricciardo"
   },
   {
     "email": "sergio@f1.com",
@@ -41,8 +37,7 @@
     "password": "123456789",
     "number": "9879879877",
     "firstName": "Sergio",
-    "lastName": "Perez",
-    "username": "serez"
+    "lastName": "Perez"
   },
   {
     "email": "kimi@f1.com",
@@ -50,8 +45,7 @@
     "password": "123456789",
     "number": "9879879873",
     "firstName": "Kimi",
-    "lastName": "Raikonnen",
-    "username": "kimnen"
+    "lastName": "Raikonnen"
   },
   {
     "email": "seb@f1.com",
@@ -59,8 +53,7 @@
     "password": "123456789",
     "number": "9879879878",
     "firstName": "Sebastian",
-    "lastName": "Vettel",
-    "username": "sebtel"
+    "lastName": "Vettel"
   },
   {
     "email": "fernando@f1.com",
@@ -68,7 +61,6 @@
     "password": "123456789",
     "number": "9879879874",
     "firstName": "Fernando",
-    "lastName": "Alonso",
-    "username": "ferso"
+    "lastName": "Alonso"
   }
 ]

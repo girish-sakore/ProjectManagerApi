@@ -1,7 +1,6 @@
 package com.gsoft.projectManager.security.config;
 
 import com.gsoft.projectManager.appuser.CustomUserDetailsServiceImpl;
-import com.gsoft.projectManager.appuser.AppUserService;
 import com.gsoft.projectManager.appuser.login.JwtAuthenticationEntryPoint;
 import com.gsoft.projectManager.appuser.login.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;

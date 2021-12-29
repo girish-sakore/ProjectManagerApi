@@ -13,6 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,6 +38,32 @@ public class AppUserServiceImpl implements AppUserService {
     private final EmailSender emailSender;
 
     private final Logger LOGGER = LoggerFactory.getLogger(AppUserService.class);
+
+    public Authentication loginUser(Optional<AppUser> optionalAppUser){
+        if(optionalAppUser.isPresent()){
+            AppUser appUser = optionalAppUser.get();
+            if(!appUser.isEnabled()){
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is disabled!");
+            }
+            else if(!appUser.isAccountNonLocked()){
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is locked!");
+            }
+            else if(!appUser.isAccountNonExpired()){
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is expired!");
+            }
+            else if(!appUser.isCredentialsNonExpired()){
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account credentials are expired!");
+            }
+            UserPrincipal user = UserPrincipal.create(optionalAppUser.get());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(),
+                    user.getPassword(),
+                    user.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            LOGGER.info("User signed in successfully!");
+            return authentication;
+        }
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to login!");
+    }
 
     @Override
     @Async
@@ -104,7 +133,7 @@ public class AppUserServiceImpl implements AppUserService {
                 appUser.getFirstName(),
                 appUser.getLastName(),
                 appUser.getNumber(),
-                appUser.getAppUserRoleStringFormat()
+                appUser.getRoles()
         );
     }
 

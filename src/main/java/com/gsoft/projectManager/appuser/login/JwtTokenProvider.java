@@ -1,16 +1,14 @@
 package com.gsoft.projectManager.appuser.login;
+
 import java.util.Date;
-
-import com.gsoft.projectManager.appuser.AppUserService;
+import com.gsoft.projectManager.appuser.CustomUserDetailsService;
 import com.gsoft.projectManager.appuser.UserPrincipal;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -30,10 +28,10 @@ public class JwtTokenProvider {
     private int jwtExpirationInMs;
 
     @Autowired
-    private AppUserService appUserService;
+    private CustomUserDetailsService customUserDetailsService;
 
     public String generateJwtToken(Authentication authentication){
-        UserPrincipal userPrincipal = (UserPrincipal) appUserService.loadUserByUsername((String) authentication.getPrincipal());
+        UserPrincipal userPrincipal = (UserPrincipal) customUserDetailsService.loadUserByUsername((String) authentication.getPrincipal());
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 

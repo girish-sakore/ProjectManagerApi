@@ -7,14 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.List;
 
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -44,7 +37,6 @@ public class AppUser {
     private String lastName;
 
     private String password;
-    private String username;
 
     @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name="user_role", joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"), 
@@ -104,12 +96,5 @@ public class AppUser {
                 + roles.toString() + "\n"
                 + "Enabled:" + enabled + "\n"
                 + "Locked:" + locked + "\n";
-    }
-
-    public String getAppUserRoleStringFormat() {
-        if(appUserRole.equals(AppUserRole.ADMIN)) return "Admin";
-        if(appUserRole.equals(AppUserRole.MNGR)) return "Manager";
-        if(appUserRole.equals(AppUserRole.DEV)) return "Developer";
-        return null;
     }
 }

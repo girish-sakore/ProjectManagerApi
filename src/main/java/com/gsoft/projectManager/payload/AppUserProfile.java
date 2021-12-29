@@ -1,7 +1,10 @@
 package com.gsoft.projectManager.payload;
 
+import com.gsoft.projectManager.appuser.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -11,6 +14,6 @@ public class AppUserProfile {
     String firstName;
     String lastName;
     String number;
-    String role;
+    List<Role> roles;
 
 }

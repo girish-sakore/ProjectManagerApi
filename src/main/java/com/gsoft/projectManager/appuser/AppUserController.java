@@ -6,6 +6,7 @@ import com.gsoft.projectManager.registration.RegistrationRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,6 +53,7 @@ public class AppUserController {
         return new ResponseEntity< > (response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/{username}/changePassword")
     public ResponseEntity<?> changePasswordByAdmin(@PathVariable String username, @RequestBody PasswordRequest request) {
         Boolean response = appUserService.updateAppUserPasswordByAdmin(username, request);
