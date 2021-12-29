@@ -1,6 +1,11 @@
 package com.gsoft.projectManager.appuser;
 
+
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.List;
+
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,9 +22,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -27,10 +30,19 @@ public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(unique = true)
     private String number;
+
     private String firstName;
     private String lastName;
+
     private String password;
     private String username;
 
@@ -65,7 +77,7 @@ public class AppUser {
     public String getUsername() {
         return username;
     }
-
+  
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -84,7 +96,6 @@ public class AppUser {
 
     @Override
     public String toString() {
-
         return "" + email + "\n"
                 + password + "\n"
                 + number + "\n"
@@ -93,6 +104,12 @@ public class AppUser {
                 + roles.toString() + "\n"
                 + "Enabled:" + enabled + "\n"
                 + "Locked:" + locked + "\n";
+    }
 
+    public String getAppUserRoleStringFormat() {
+        if(appUserRole.equals(AppUserRole.ADMIN)) return "Admin";
+        if(appUserRole.equals(AppUserRole.MNGR)) return "Manager";
+        if(appUserRole.equals(AppUserRole.DEV)) return "Developer";
+        return null;
     }
 }

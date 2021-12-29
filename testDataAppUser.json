@@ -1,6 +1,7 @@
 [
   {
     "email": "max@f1.com",
+    "username": "bull",
     "password": "123456789",
     "number": "1324657981",
     "firstName": "Max",
@@ -9,6 +10,7 @@
   },
   {
     "email": "lewis@f1.com",
+    "username": "legend",
     "password": "123456789",
     "number": "7987987988",
     "firstName": "Lewis",
@@ -17,6 +19,7 @@
   },
   {
     "email": "lando@f1.com",
+    "username": "lando",
     "password": "123456789",
     "number": "6549871320",
     "firstName": "Lando",
@@ -25,6 +28,7 @@
   },
   {
     "email": "daniel@f1.com",
+    "username": "funnyGuy",
     "password": "123456789",
     "number": "6549871234",
     "firstName": "Daniel",
@@ -33,6 +37,7 @@
   },
   {
     "email": "sergio@f1.com",
+    "username": "cheko",
     "password": "123456789",
     "number": "9879879877",
     "firstName": "Sergio",
@@ -41,6 +46,7 @@
   },
   {
     "email": "kimi@f1.com",
+    "username": "oldDog",
     "password": "123456789",
     "number": "9879879873",
     "firstName": "Kimi",
@@ -49,6 +55,7 @@
   },
   {
     "email": "seb@f1.com",
+    "username": "mrCool",
     "password": "123456789",
     "number": "9879879878",
     "firstName": "Sebastian",
@@ -57,6 +64,7 @@
   },
   {
     "email": "fernando@f1.com",
+    "username": "spanish",
     "password": "123456789",
     "number": "9879879874",
     "firstName": "Fernando",

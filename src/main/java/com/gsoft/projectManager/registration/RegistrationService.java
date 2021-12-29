@@ -51,22 +51,29 @@ public class RegistrationService {
 
     @Transactional
     public String confirmToken(String token) {
+        String EMAIL_IS_ALREADY_VERIFIED_MSG = "%s email already verified with %s username";
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND ,"Token not found"));
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new ResponseStatusException(HttpStatus.ALREADY_REPORTED, "Email already confirmed");
+            throw new ResponseStatusException(
+                    HttpStatus.ALREADY_REPORTED,
+                    String.format(EMAIL_IS_ALREADY_VERIFIED_MSG, confirmationToken.getAppUser().getEmail(), confirmationToken.getAppUser().getUsername())
+            );
         }
         LocalDateTime expiredAt = confirmationToken.getExpiredAt();
         if (expiredAt.isBefore(LocalDateTime.now())) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "token Expired");
         }
         confirmationTokenService.setConfirmedAt(token);
-        appUserService.enableAppUser(
+        Boolean isAppUserEnabled = appUserService.enableAppUser(
                 confirmationToken.getAppUser().getEmail()
         );
-        LOGGER.info(confirmationToken.getAppUser().getEmail() + " User enabled");
-        return "Your email is Verified.";
+        if(isAppUserEnabled) {
+            LOGGER.info(confirmationToken.getAppUser().getEmail() + " is verified.");
+            return "Your email is Verified.";
+        }
+        return "Your email cannot be verified";
     }
 
 }

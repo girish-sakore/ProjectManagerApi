@@ -1,9 +1,9 @@
 package com.gsoft.projectManager.security.config;
 
+import com.gsoft.projectManager.appuser.CustomUserDetailsServiceImpl;
 import com.gsoft.projectManager.appuser.AppUserService;
 import com.gsoft.projectManager.appuser.login.JwtAuthenticationEntryPoint;
 import com.gsoft.projectManager.appuser.login.JwtAuthenticationFilter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import lombok.AllArgsConstructor;
 
 @Configuration
@@ -28,7 +27,7 @@ import lombok.AllArgsConstructor;
     prePostEnabled=true
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final AppUserService appUserService;
+    private final CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
@@ -52,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
@@ -60,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(bCryptPasswordEncoder);
-        provider.setUserDetailsService(appUserService);
+        provider.setUserDetailsService(customUserDetailsServiceImpl);
 
         return provider;
     }
