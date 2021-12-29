@@ -6,19 +6,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
-    @Query("SELECT u FROM AppUser u WHERE u.email = ?1")
+//    @Query("SELECT u FROM AppUser u WHERE u.email = ?1")
     Optional<AppUser> findByEmail(String email);
-    
-    @Transactional
-    @Modifying
-    @Query("UPDATE AppUser a " + "SET a.enabled = TRUE WHERE a.email = ?1")
-    void enableAppUser(String email);
 
-    void deleteByEmail(String email);
+    List<AppUser>findAll();
+
+    Optional<AppUser> findAppUserByUsername(String username);
+
+    void deleteByUsername(String username);
+
+    Boolean existsAppUserByUsername(String username);
 }

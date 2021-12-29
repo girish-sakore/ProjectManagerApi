@@ -3,40 +3,49 @@ package com.gsoft.projectManager.appuser;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class AppUser implements UserDetails {
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(unique = true)
     private String number;
+
     private String firstName;
     private String lastName;
+
     private String password;
 
     @Enumerated(EnumType.STRING)
     private AppUserRole appUserRole;
+
     private Boolean locked = false;
     private Boolean enabled = false;
 
     public AppUser(String email,
+                   String username,
                    String password,
                    String number,
                    String firstName,
                    String lastName,
                    AppUserRole appUserRole) {
         this.email = email;
+        this.username = username;
         this.password = password;
         this.number = number;
         this.firstName = firstName;
@@ -44,45 +53,29 @@ public class AppUser implements UserDetails {
         this.appUserRole = appUserRole;
     }
 
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
         return Collections.singletonList(authority);
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @Override
     public boolean isAccountNonLocked() {
         return !locked;
     }
 
-    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    @Override
     public boolean isEnabled() {
         return enabled;
     }
 
     @Override
     public String toString() {
-
         return "" + email + "\n"
                 + password + "\n"
                 + number + "\n"
@@ -91,6 +84,12 @@ public class AppUser implements UserDetails {
                 + appUserRole + "\n"
                 + "Enabled:" + enabled + "\n"
                 + "Locked:" + locked + "\n";
+    }
 
+    public String getAppUserRoleStringFormat() {
+        if(appUserRole.equals(AppUserRole.ADMIN)) return "Admin";
+        if(appUserRole.equals(AppUserRole.MNGR)) return "Manager";
+        if(appUserRole.equals(AppUserRole.DEV)) return "Developer";
+        return null;
     }
 }

@@ -25,8 +25,4 @@ class RegisterUserController {
         return new ResponseEntity<>(registrationService.confirmToken(token), HttpStatus.OK);
     }
 
-    @GetMapping("/getError")
-    public void showError(){
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "jkashdjkhasdjkhaskjdhasjkdhasd");
-    }
 }
