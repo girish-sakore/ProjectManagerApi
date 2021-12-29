@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("api/v1/register")
@@ -15,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 class RegisterUserController {
     private final RegistrationService registrationService;
     private final Logger LOGGER = LoggerFactory.getLogger(RegisterUserController.class);
+    
     @PostMapping
     public AppUser register(@RequestBody RegistrationRequest request){
         return registrationService.register(request);
@@ -24,5 +24,4 @@ class RegisterUserController {
     public ResponseEntity<?> verifyToken(@RequestParam("token") String token) {
         return new ResponseEntity<>(registrationService.confirmToken(token), HttpStatus.OK);
     }
-
 }

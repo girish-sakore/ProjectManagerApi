@@ -1,11 +1,15 @@
 package com.gsoft.projectManager.registration;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+
 import com.gsoft.projectManager.appuser.AppUser;
-import com.gsoft.projectManager.appuser.AppUserRole;
 import com.gsoft.projectManager.appuser.AppUserService;
+import com.gsoft.projectManager.appuser.RoleService;
+import com.gsoft.projectManager.appuser.Rolename;
 import com.gsoft.projectManager.registration.token.ConfirmationToken;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
-import lombok.AllArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +25,7 @@ public class RegistrationService {
     private final AppUserService appUserService;
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
+    private final RoleService roleService;
 
     public final Logger LOGGER = LoggerFactory.getLogger(RegistrationService.class);
 
@@ -39,7 +44,7 @@ public class RegistrationService {
                         request.getNumber(),
                         request.getFirstName(),
                         request.getLastName(),
-                        AppUserRole.DEV
+                        Arrays.asList(roleService.findOrCreateRole(Rolename.ROLE_USER))
                 )
         );
     }

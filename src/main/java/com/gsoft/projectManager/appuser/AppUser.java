@@ -1,12 +1,26 @@
 package com.gsoft.projectManager.appuser;
 
+
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.List;
 
-import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @AllArgsConstructor
@@ -30,9 +44,12 @@ public class AppUser {
     private String lastName;
 
     private String password;
+    private String username;
 
-    @Enumerated(EnumType.STRING)
-    private AppUserRole appUserRole;
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name="user_role", joinColumns=@JoinColumn(name="user_id", referencedColumnName="id"), 
+               inverseJoinColumns=@JoinColumn(name="role_id", referencedColumnName="id"))
+    private List<Role> roles;
 
     private Boolean locked = false;
     private Boolean enabled = false;
@@ -43,21 +60,24 @@ public class AppUser {
                    String number,
                    String firstName,
                    String lastName,
-                   AppUserRole appUserRole) {
+                   List<Role> roles) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.number = number;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.appUserRole = appUserRole;
+        this.roles = roles;
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(appUserRole.name());
-        return Collections.singletonList(authority);
+    public String getPassword() {
+        return password;
     }
 
+    public String getUsername() {
+        return username;
+    }
+  
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -81,7 +101,7 @@ public class AppUser {
                 + number + "\n"
                 + firstName + "\n"
                 + lastName + "\n"
-                + appUserRole + "\n"
+                + roles.toString() + "\n"
                 + "Enabled:" + enabled + "\n"
                 + "Locked:" + locked + "\n";
     }
