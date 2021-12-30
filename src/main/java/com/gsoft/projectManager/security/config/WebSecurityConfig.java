@@ -3,6 +3,7 @@ package com.gsoft.projectManager.security.config;
 import com.gsoft.projectManager.appuser.CustomUserDetailsServiceImpl;
 import com.gsoft.projectManager.appuser.login.JwtAuthenticationEntryPoint;
 import com.gsoft.projectManager.appuser.login.JwtAuthenticationFilter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import lombok.AllArgsConstructor;
 
 @Configuration
@@ -42,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-                .antMatchers("/api/v*/register", "/api/v*/register/**", "/api/v*/login", "/api/v*/appUsers/checkUsernameAvailability")
+                .antMatchers("/api/v*/register", "/api/v*/login", "/api/v*/appUsers/checkUsernameAvailability")
                 .permitAll()
             .anyRequest()
             .authenticated();    
@@ -59,7 +61,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(bCryptPasswordEncoder);
         provider.setUserDetailsService(customUserDetailsServiceImpl);
-
         return provider;
     }
 }

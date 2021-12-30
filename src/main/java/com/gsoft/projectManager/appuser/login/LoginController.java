@@ -45,6 +45,7 @@ public class LoginController {
         }
         Authentication authentication = appUserService.loginUser(optionalUser);
         TokenDetails tokenDetails = new TokenDetails(jwtTokenProvider.generateJwtToken(authentication));
+        LOGGER.info("Token generated successfully!");
         return ResponseEntity.ok(tokenDetails);
     }
 }

@@ -31,30 +31,35 @@ public class AppUserController {
     private final AppUserService appUserService;
     private final Logger LOGGER = LoggerFactory.getLogger(AppUserController.class);
 
+    @PreAuthorize("hasRole('ADMIN')") // maybe add some other roles
     @GetMapping("/")
     public ResponseEntity<?> allAppUsers() {
         List<AppUserProfile> response = appUserService.getAllAppUsers();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or principal == #username")
     @GetMapping("/{username}")
     public ResponseEntity<?> appUserDetails(@PathVariable String username) {
         AppUserProfile response = appUserService.getAppUserDetails(username);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or principal == #username")
     @PatchMapping("/{username}")
     public ResponseEntity<?> updateAppUserPartial(@PathVariable String username, @RequestBody RegistrationRequest request) {
         AppUser response = appUserService.updateAppUserPatch(username, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or principal == #username")
     @PutMapping("/{username}")
     public ResponseEntity<?> updateAppUser(@PathVariable String username, @RequestBody RegistrationRequest request) {
         AppUser response = appUserService.updateAppUser(username, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or principal == #username")
     @DeleteMapping("/{username}")
     public ResponseEntity<?> deleteAppUser(@PathVariable String username) {
         if (appUserService.deleteAppUser(username))
@@ -62,6 +67,7 @@ public class AppUserController {
         return new ResponseEntity<>("Unexpected error.", HttpStatus.EXPECTATION_FAILED);
     }
 
+    @PreAuthorize("principal == #username")
     @PostMapping("/{username}/changePassword")
     public ResponseEntity<?> changePassword(@PathVariable String username, @RequestBody PasswordRequest request) {
         Boolean response = appUserService.updateAppUserPassword(username, request);
