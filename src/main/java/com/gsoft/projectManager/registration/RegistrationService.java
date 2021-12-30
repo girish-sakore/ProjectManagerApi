@@ -33,7 +33,7 @@ public class RegistrationService {
         boolean isEmailValid = emailValidator.test(request.getEmail());
 
         if (!isEmailValid) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Email not valid");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email not valid");
         }
 
         return appUserService.signUpUser(
@@ -54,7 +54,7 @@ public class RegistrationService {
         String EMAIL_IS_ALREADY_VERIFIED_MSG = "%s email already verified with %s username";
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
                 .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND ,"Token not found"));
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Token not found"));
         if (confirmationToken.getConfirmedAt() != null) {
             throw new ResponseStatusException(
                     HttpStatus.ALREADY_REPORTED,
@@ -69,7 +69,7 @@ public class RegistrationService {
         Boolean isAppUserEnabled = appUserService.enableAppUser(
                 confirmationToken.getAppUser().getEmail()
         );
-        if(isAppUserEnabled) {
+        if (isAppUserEnabled) {
             LOGGER.info(confirmationToken.getAppUser().getEmail() + " is verified.");
             return "Your email is Verified.";
         }

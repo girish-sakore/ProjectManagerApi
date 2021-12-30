@@ -10,7 +10,7 @@ Spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
@@ -47,4 +47,4 @@ server:
 
 app:
   jwtSecret: BAvl5GWxoeZRkbsqM244PpfUWU8UuCWQstBiO9fLRcJmgimSesfpVnkpMF62C5w
-  jwtExpirationInMs: 360000
+  jwtExpirationInMs: 86400000 # 24 hrs

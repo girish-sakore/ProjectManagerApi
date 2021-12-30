@@ -18,9 +18,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 class RegisterUserController {
     private final RegistrationService registrationService;
-    
+
     @PostMapping
-    public AppUser register(@RequestBody RegistrationRequest request){
+    public AppUser register(@RequestBody RegistrationRequest request) {
         return registrationService.register(request);
     }
 

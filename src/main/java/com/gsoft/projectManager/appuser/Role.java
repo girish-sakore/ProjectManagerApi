@@ -33,4 +33,9 @@ public class Role {
     public Rolename getName(){
         return this.name;
     }
+
+    @Override
+    public String toString(){
+        return name.name();
+    }
 }

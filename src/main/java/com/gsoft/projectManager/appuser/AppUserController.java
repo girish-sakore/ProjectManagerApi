@@ -1,11 +1,11 @@
 package com.gsoft.projectManager.appuser;
 
-import java.util.List;
-
 import com.gsoft.projectManager.payload.AppUserProfile;
 import com.gsoft.projectManager.payload.request.PasswordRequest;
 import com.gsoft.projectManager.registration.RegistrationRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,65 +18,73 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.AllArgsConstructor;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/appUsers")
 public class AppUserController {
     private final AppUserService appUserService;
-    private final AppUserRepository appUserRepository;
+    private final Logger LOGGER = LoggerFactory.getLogger(AppUserController.class);
 
     @GetMapping("/")
     public ResponseEntity<?> allAppUsers() {
         List<AppUserProfile> response = appUserService.getAllAppUsers();
-        return new ResponseEntity< >(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{username}")
     public ResponseEntity<?> appUserDetails(@PathVariable String username) {
         AppUserProfile response = appUserService.getAppUserDetails(username);
-        return new ResponseEntity< >(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("/{username}")
     public ResponseEntity<?> updateAppUserPartial(@PathVariable String username, @RequestBody RegistrationRequest request) {
         AppUser response = appUserService.updateAppUserPatch(username, request);
-        return new ResponseEntity< >(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{username}")
     public ResponseEntity<?> updateAppUser(@PathVariable String username, @RequestBody RegistrationRequest request) {
         AppUser response = appUserService.updateAppUser(username, request);
-        return new ResponseEntity< >(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{username}")
     public ResponseEntity<?> deleteAppUser(@PathVariable String username) {
-        appUserService.deleteAppUser(username);
-        return new ResponseEntity< >(String.format("User with username %s is Deleted.", username), HttpStatus.ACCEPTED);
+        if (appUserService.deleteAppUser(username))
+            return new ResponseEntity<>(String.format("User with username %s is Deleted.", username), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Unexpected error.", HttpStatus.EXPECTATION_FAILED);
     }
 
     @PostMapping("/{username}/changePassword")
     public ResponseEntity<?> changePassword(@PathVariable String username, @RequestBody PasswordRequest request) {
-        Boolean response = appUserService.updateAppUserPassword(username,request);
-        return new ResponseEntity< > (response, HttpStatus.OK);
+        Boolean response = appUserService.updateAppUserPassword(username, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/{username}/changePassword")
     public ResponseEntity<?> changePasswordByAdmin(@PathVariable String username, @RequestBody PasswordRequest request) {
         Boolean response = appUserService.updateAppUserPasswordByAdmin(username, request);
-        return new ResponseEntity< > (response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/admin/{username}/changeRoles")
-    public ResponseEntity<?> changeRoles(@PathVariable String username, @RequestBody List<Role> roles){
-        AppUser appUser = appUserRepository.findByUsername(username)
-                                           .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!"));
-        appUser.setRoles(roles);
-        return ResponseEntity.ok(appUserRepository.save(appUser));
+    @PostMapping("/admin/{username}/assignRoles")
+    public ResponseEntity<?> assignRoles(@PathVariable String username, @RequestBody List<Role> roles) {
+        LOGGER.warn(roles.toString());
+        AppUser response = appUserService.assignRoles(username, roles);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/checkUsernameAvailability")
+    public ResponseEntity<?> checkUsernameAvailability(@RequestParam String username) {
+        Boolean response = appUserService.checkUsernameAvailability(username);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

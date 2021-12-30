@@ -23,5 +23,5 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     void deleteByUsername(String username);
 
-    Boolean existsAppUserByUsername(String username);
+    Boolean existsByUsername(String username);
 }
