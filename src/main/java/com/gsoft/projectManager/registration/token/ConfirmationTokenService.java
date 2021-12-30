@@ -1,23 +1,22 @@
 package com.gsoft.projectManager.registration.token;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import com.gsoft.projectManager.appuser.AppUser;
 import com.gsoft.projectManager.appuser.AppUserRepository;
-import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class ConfirmationTokenService {
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final AppUserRepository appUserRepository;
-//    private final Logger LOGGER = LoggerFactory.getLogger(ConfirmationTokenService.class);
 
     public void saveConfirmationToken(ConfirmationToken token) {
         confirmationTokenRepository.save(token);

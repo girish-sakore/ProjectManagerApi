@@ -1,5 +1,11 @@
 package com.gsoft.projectManager.appuser;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import com.gsoft.projectManager.mailer.EmailSender;
 import com.gsoft.projectManager.mailer.EmailService;
 import com.gsoft.projectManager.payload.AppUserProfile;
@@ -8,7 +14,7 @@ import com.gsoft.projectManager.registration.RegistrationRequest;
 import com.gsoft.projectManager.registration.token.ConfirmationToken;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenRepository;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
-import lombok.AllArgsConstructor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,11 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -59,7 +61,7 @@ public class AppUserServiceImpl implements AppUserService {
                     user.getPassword(),
                     user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            LOGGER.info("User signed in successfully!");
+            LOGGER.info("User authenticated!");
             return authentication;
         }
         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to login!");
@@ -139,7 +141,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUserProfile getAppUserDetails(String username) {
-        AppUser appUser = appUserRepository.findAppUserByUsername(username)
+        AppUser appUser = appUserRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(USER_NOT_FOUND_MSG, username))
                 );
         return setAppUserProfile(appUser);
@@ -155,7 +157,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUser updateAppUser(String username, RegistrationRequest request) {
-        AppUser appUser = appUserRepository.findAppUserByUsername(username)
+        AppUser appUser = appUserRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(USER_NOT_FOUND_MSG, username)));
 
         appUser.setUsername(request.getUsername());
@@ -168,7 +170,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUser updateAppUserPatch(String username, RegistrationRequest request) {
-        AppUser appUser = appUserRepository.findAppUserByUsername(username)
+        AppUser appUser = appUserRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(USER_NOT_FOUND_MSG, username)));
 
         if (request.getUsername() != null) appUser.setUsername(request.getUsername());
@@ -181,7 +183,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public Boolean updateAppUserPassword(String username, PasswordRequest request) {
-        AppUser appUser = appUserRepository.findAppUserByUsername(username)
+        AppUser appUser = appUserRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(USER_NOT_FOUND_MSG, username)));
 
         if (bCryptPasswordEncoder.matches(request.getOldPassword(), appUser.getPassword())) {
@@ -195,7 +197,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public Boolean updateAppUserPasswordByAdmin(String username, PasswordRequest request) {
-        AppUser appUser = appUserRepository.findAppUserByUsername(username)
+        AppUser appUser = appUserRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(USER_NOT_FOUND_MSG, username)));
         String encodedPassword = bCryptPasswordEncoder.encode(request.getNewPassword());
         appUser.setPassword(encodedPassword);

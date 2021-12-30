@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 public interface AppUserService {
     AppUser signUpUser(AppUser appUser);
 
-
     Boolean enableAppUser(String email);
 
     List<AppUserProfile> getAllAppUsers();

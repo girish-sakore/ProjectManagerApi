@@ -1,19 +1,23 @@
 package com.gsoft.projectManager.appuser;
 
 
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.List;
 
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @AllArgsConstructor
@@ -25,9 +29,11 @@ public class AppUser {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @Email
     private String email;
 
     @Column(unique = true, nullable = false)
+    @Pattern(regexp="^[a-zA-Z0-9]+$", message="Invalid username!")
     private String username;
 
     @Column(unique = true)
@@ -35,7 +41,6 @@ public class AppUser {
 
     private String firstName;
     private String lastName;
-
     private String password;
 
     @ManyToMany(fetch=FetchType.EAGER)

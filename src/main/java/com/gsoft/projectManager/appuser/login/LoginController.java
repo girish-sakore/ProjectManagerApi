@@ -5,17 +5,17 @@ import java.util.Optional;
 import com.gsoft.projectManager.appuser.AppUser;
 import com.gsoft.projectManager.appuser.AppUserRepository;
 import com.gsoft.projectManager.appuser.AppUserService;
+import com.gsoft.projectManager.payload.request.LoginDetails;
+import com.gsoft.projectManager.payload.response.TokenDetails;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -32,9 +32,11 @@ public class LoginController {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping("/api/v1/login")
-    public ResponseEntity<?> getJwtToken(@RequestParam String usernameOrEmail, @RequestParam String password){
+    public ResponseEntity<?> getJwtToken(@RequestBody LoginDetails loginDetails){
+        String usernameOrEmail = loginDetails.getUsernameOrEmail();
+        String password = loginDetails.getPassword();
         Optional<AppUser> optionalUser = appUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
-        // check password
+
         if(optionalUser.isEmpty()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid username or email!");
         }
@@ -42,6 +44,7 @@ public class LoginController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid password!");
         }
         Authentication authentication = appUserService.loginUser(optionalUser);
-        return ResponseEntity.ok(jwtTokenProvider.generateJwtToken(authentication));
+        TokenDetails tokenDetails = new TokenDetails(jwtTokenProvider.generateJwtToken(authentication));
+        return ResponseEntity.ok(tokenDetails);
     }
 }

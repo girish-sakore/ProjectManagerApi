@@ -1,9 +1,10 @@
 package com.gsoft.projectManager.registration;
 
-import lombok.AllArgsConstructor;
+import java.util.function.Predicate;
+
 import org.springframework.stereotype.Service;
 
-import java.util.function.Predicate;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -11,7 +12,7 @@ public class EmailValidator implements Predicate<String> {
 
     @Override
     public boolean test(String s) {
-//        TODO: Regex to validate
+//        TODO: Regex to validate using email validator 
         return true;
     }
 }

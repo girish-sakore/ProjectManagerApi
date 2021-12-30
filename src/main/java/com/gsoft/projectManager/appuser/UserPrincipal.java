@@ -12,8 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class UserPrincipal implements UserDetails {
     
     private Long id;
-    private String firstName;
-    private String lastName;
     private String email;
     private String password;
     private String username;
@@ -26,10 +24,8 @@ public class UserPrincipal implements UserDetails {
         return authorities == null ? new ArrayList<>() : new ArrayList<>(authorities);
     }
 
-    public UserPrincipal(Long id, String firstName, String lastName, String email, String username, String password, Collection<? extends GrantedAuthority> authorities){
+    public UserPrincipal(Long id, String email, String username, String password, Collection<? extends GrantedAuthority> authorities){
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
@@ -40,7 +36,7 @@ public class UserPrincipal implements UserDetails {
         List<GrantedAuthority> authorities = appUser.getRoles().stream()
                                                     .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                                                     .collect(Collectors.toList());
-        return new UserPrincipal(appUser.getId(), appUser.getFirstName(), appUser.getLastName(), appUser.getEmail(), 
+        return new UserPrincipal(appUser.getId(), appUser.getEmail(), 
                                  appUser.getUsername(), appUser.getPassword(), authorities);
     }
 

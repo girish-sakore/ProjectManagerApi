@@ -44,7 +44,7 @@ public class RegistrationService {
                         request.getNumber(),
                         request.getFirstName(),
                         request.getLastName(),
-                        Arrays.asList(roleService.findOrCreateRole(Rolename.ROLE_USER))
+                        Arrays.asList(roleService.findRoleByName(Rolename.ROLE_USER))
                 )
         );
     }
