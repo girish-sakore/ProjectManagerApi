@@ -1,50 +1,31 @@
 package com.gsoft.projectManager;
 
-import static org.springframework.test.util.AssertionErrors.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import javax.mail.internet.MimeMessage;
+import com.gsoft.projectManager.appuser.AppUserController;
+import com.gsoft.projectManager.appuser.login.LoginController;
+import com.gsoft.projectManager.registration.RegisterUserController;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-
 
 @SpringBootTest
 class ProjectManagerApplicationTests {
+	
+	@Autowired
+	private AppUserController appUserController;
 
-	private final JavaMailSender javaMailSender;
+	@Autowired
+	private LoginController loginController;
 
-	ProjectManagerApplicationTests(JavaMailSender javaMailSender) {
-		this.javaMailSender = javaMailSender;
-	}
+	@Autowired
+	private RegisterUserController registerUserController;
 
 	@Test
 	void contextLoads() {
-
+		assertNotNull(appUserController);
+		assertNotNull(loginController);
+		assertNotNull(registerUserController);
 	}
-
-	@Test
-	public void send() throws Exception {
-		System.out.println("--------------1------------------");
-		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-//            mimeMessage.setContent(mail,"text/html");
-		System.out.println("--------------2------------------" + mimeMessage);
-		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-		System.out.println("--------------3------------------" + helper.toString());
-		helper.setText("This is the test mail", false);
-		System.out.println("--------------4------------------" + helper.toString());
-		helper.setTo("test@mymail.com");
-		System.out.println("--------------5------------------");
-		helper.setSubject("Email verification from ProjectManager");
-		System.out.println("--------------6------------------");
-		helper.setFrom("test@developer.com");
-		try {
-			javaMailSender.send(mimeMessage);
-		} catch (MailException e) {
-			assertFalse("Email cannot be sent", true);
-		}
-	}
-
 }

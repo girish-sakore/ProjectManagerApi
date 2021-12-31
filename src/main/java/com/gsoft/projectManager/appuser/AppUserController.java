@@ -1,5 +1,7 @@
 package com.gsoft.projectManager.appuser;
 
+import java.util.List;
+
 import com.gsoft.projectManager.payload.AppUserProfile;
 import com.gsoft.projectManager.payload.request.PasswordRequest;
 import com.gsoft.projectManager.registration.RegistrationRequest;
@@ -17,12 +19,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
-
-import java.util.List;
 
 @RestController
 @AllArgsConstructor
