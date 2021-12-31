@@ -10,6 +10,7 @@ public class ErrorDetails {
     private String statusCode;
     private LocalDateTime timestamp;
     private String URI;
+
     public ErrorDetails(String message, String statusCode, LocalDateTime timestamp, String URI) {
         this.message = message;
         this.statusCode = statusCode;

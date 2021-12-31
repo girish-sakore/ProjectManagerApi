@@ -1,7 +1,9 @@
 package com.gsoft.projectManager.exception;
 
+import com.gsoft.projectManager.payload.response.ExceptionResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,15 +16,16 @@ public class GlobalExceptionHandler {
     Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<?> myException(ResponseStatusException exception, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                exception.getMessage(),
-                exception.getStatus().toString(),
-                LocalDateTime.now(),
-                request.getDescription(false).substring(4)
-                        );
-        LOGGER.error("Handled Exception: " +  exception);
+    public ResponseEntity<?> catchException(ResponseStatusException exception) {
+        String message = exception.getMessage();
+        HttpStatus status = exception.getStatus();
 
-        return new ResponseEntity<>(errorDetails, exception.getStatus());
+        ExceptionResponse exceptionResponse = new ExceptionResponse();
+        exceptionResponse.setSuccess(Boolean.FALSE);
+        exceptionResponse.setMessage(message);
+
+        return new ResponseEntity< >(exceptionResponse, status);
     }
+
+
 }

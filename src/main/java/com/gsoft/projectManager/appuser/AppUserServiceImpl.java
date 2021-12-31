@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import com.gsoft.projectManager.mailer.EmailSender;
 import com.gsoft.projectManager.mailer.EmailService;
-import com.gsoft.projectManager.payload.AppUserProfile;
+import com.gsoft.projectManager.payload.response.AppUserProfile;
 import com.gsoft.projectManager.payload.request.PasswordRequest;
 import com.gsoft.projectManager.registration.RegistrationRequest;
 import com.gsoft.projectManager.registration.token.ConfirmationToken;

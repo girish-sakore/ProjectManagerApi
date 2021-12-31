@@ -1,6 +1,6 @@
 package com.gsoft.projectManager.appuser;
 
-import com.gsoft.projectManager.payload.AppUserProfile;
+import com.gsoft.projectManager.payload.response.AppUserProfile;
 import com.gsoft.projectManager.payload.request.PasswordRequest;
 import com.gsoft.projectManager.registration.RegistrationRequest;
 
