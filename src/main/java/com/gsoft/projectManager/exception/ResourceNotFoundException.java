@@ -10,9 +10,9 @@ public class ResourceNotFoundException extends RuntimeException {
 
 	private transient ExceptionResponse exceptionResponse;
 
-	private String resourceName;
-	private String fieldName;
-	private Object fieldValue;
+	private  String resourceName;
+	private  String fieldName;
+	private  Object fieldValue;
 
 	public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue) {
 		super();
@@ -40,6 +40,6 @@ public class ResourceNotFoundException extends RuntimeException {
 	private void setExceptionResponse() {
 		String message = String.format("%s not found with %s: '%s'", resourceName, fieldName, fieldValue);
 
-		exceptionResponse = new ExceptionResponse(Boolean.FALSE, message);
+//		exceptionResponse = new ExceptionResponse(Boolean.FALSE, message);
 	}
 }

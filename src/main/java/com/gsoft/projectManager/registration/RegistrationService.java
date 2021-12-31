@@ -7,6 +7,8 @@ import com.gsoft.projectManager.appuser.AppUser;
 import com.gsoft.projectManager.appuser.AppUserService;
 import com.gsoft.projectManager.appuser.RoleService;
 import com.gsoft.projectManager.appuser.Rolename;
+import com.gsoft.projectManager.exception.BadRequestException;
+import com.gsoft.projectManager.exception.ResourceNotFoundException;
 import com.gsoft.projectManager.registration.token.ConfirmationToken;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
 
@@ -54,7 +56,7 @@ public class RegistrationService {
         String EMAIL_IS_ALREADY_VERIFIED_MSG = "%s email already verified with %s username";
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
                 .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Token not found"));
+                        new BadRequestException("Token not found"));
         if (confirmationToken.getConfirmedAt() != null) {
             throw new ResponseStatusException(
                     HttpStatus.ALREADY_REPORTED,
