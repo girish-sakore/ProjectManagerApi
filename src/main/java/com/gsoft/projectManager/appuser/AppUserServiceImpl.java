@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.gsoft.projectManager.exception.*;
 import com.gsoft.projectManager.mailer.EmailSender;
 import com.gsoft.projectManager.mailer.EmailService;
 import com.gsoft.projectManager.payload.response.AppUserProfile;
@@ -17,21 +18,18 @@ import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class AppUserServiceImpl implements AppUserService {
-    private final static String USER_NOT_FOUND_MSG = "User with username %s not found.";
     private final AppUserRepository appUserRepository;
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -46,13 +44,13 @@ public class AppUserServiceImpl implements AppUserService {
         if (optionalAppUser.isPresent()) {
             AppUser appUser = optionalAppUser.get();
             if (!appUser.isEnabled()) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is disabled!");
+                throw new UnauthorizedException("User account is disabled!");
             } else if (!appUser.isAccountNonLocked()) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is locked!");
+                throw new UnauthorizedException("User account is locked!");
             } else if (!appUser.isAccountNonExpired()) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account is expired!");
+                throw new UnauthorizedException("User account is expired!");
             } else if (!appUser.isCredentialsNonExpired()) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User account credentials are expired!");
+                throw new UnauthorizedException("User account credentials are expired!");
             }
             UserPrincipal user = UserPrincipal.create(optionalAppUser.get());
             Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(),
@@ -62,7 +60,7 @@ public class AppUserServiceImpl implements AppUserService {
             LOGGER.info("User authenticated!");
             return authentication;
         }
-        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to login!");
+        throw new InternalServerException("Unable to login!");
     }
 
     @Override
@@ -78,10 +76,10 @@ public class AppUserServiceImpl implements AppUserService {
                     LOGGER.info("Token was expired and deleted");
                     newUser = existingUser.get();
                 } else { // User token not expired
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already registered. Check your email for verification");
+                    throw new BadRequestException("Email already registered. Check your email for verification");
                 }
             } else { // User token already confirmed
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already taken");
+                throw new BadRequestException("Email already taken");
             }
         } else { // User not exist (New User)
             String encodedPassword = bCryptPasswordEncoder.encode(appUser.getPassword());
@@ -113,7 +111,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public Boolean enableAppUser(String email) {
         AppUser appUser = appUserRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(USER_NOT_FOUND_MSG, email))
+                .orElseThrow(() -> new UserNotFoundException(email)
                 );
         appUser.setEnabled(true);
         return true;
@@ -140,7 +138,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUserProfile getAppUserDetails(String username) {
         AppUser appUser = appUserRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(USER_NOT_FOUND_MSG, username))
+                .orElseThrow(() -> new UserNotFoundException(username)
                 );
         return setAppUserProfile(appUser);
     }
@@ -156,7 +154,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUser updateAppUser(String username, RegistrationRequest request) {
         AppUser appUser = appUserRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(USER_NOT_FOUND_MSG, username)));
+                .orElseThrow(() -> new UserNotFoundException(username));
 
         appUser.setUsername(request.getUsername());
         appUser.setEmail(request.getEmail());
@@ -169,7 +167,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUser updateAppUserPatch(String username, RegistrationRequest request) {
         AppUser appUser = appUserRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(USER_NOT_FOUND_MSG, username)));
+                .orElseThrow(() -> new UserNotFoundException(username));
 
         if (request.getUsername() != null) appUser.setUsername(request.getUsername());
         if (request.getEmail() != null) appUser.setEmail(request.getEmail());
@@ -182,7 +180,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public Boolean updateAppUserPassword(String username, PasswordRequest request) {
         AppUser appUser = appUserRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(USER_NOT_FOUND_MSG, username)));
+                .orElseThrow(() -> new UserNotFoundException(username));
 
         if (bCryptPasswordEncoder.matches(request.getOldPassword(), appUser.getPassword())) {
             String encodedPassword = bCryptPasswordEncoder.encode(request.getNewPassword());
@@ -190,13 +188,13 @@ public class AppUserServiceImpl implements AppUserService {
             appUserRepository.save(appUser);
             return true;
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Old password is incorrect");
+        throw new BadRequestException("Old password is incorrect");
     }
 
     @Override
     public Boolean updateAppUserPasswordByAdmin(String username, PasswordRequest request) {
         AppUser appUser = appUserRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(USER_NOT_FOUND_MSG, username)));
+                .orElseThrow(() -> new UserNotFoundException(username));
         String encodedPassword = bCryptPasswordEncoder.encode(request.getNewPassword());
         appUser.setPassword(encodedPassword);
         appUserRepository.save(appUser);
@@ -206,7 +204,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public AppUser assignRoles(String username, List<Role> roles) {
         AppUser appUser = appUserRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found!"));
+                .orElseThrow(() -> new UserNotFoundException(username));
 //        appUser.setRoles(roles);
         List<Role> newRoles = new ArrayList<>();
         roles.forEach(role -> {
@@ -221,7 +219,7 @@ public class AppUserServiceImpl implements AppUserService {
         if (username.trim().length() > 4) {
             return !appUserRepository.existsByUsername(username);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is too short.");
+            throw new BadRequestException("username is too short.");
         }
     }
 

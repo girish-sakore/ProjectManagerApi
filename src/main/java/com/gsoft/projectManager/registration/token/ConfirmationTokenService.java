@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.gsoft.projectManager.appuser.AppUser;
 import com.gsoft.projectManager.appuser.AppUserRepository;
 
+import com.gsoft.projectManager.exception.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,7 +40,7 @@ public class ConfirmationTokenService {
                 return token;
             }
         } else { // Token not found
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "AppUser has no entry in ConfirmationToken. To resolve the issue Contact Admin!!");
+            throw new BadRequestException("AppUser has no entry in ConfirmationToken. To resolve the issue Contact Admin!!");
         }
     }
 

@@ -74,6 +74,13 @@ public class AppUserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("principal == #username")
+    @PostMapping("/{username}/forgotPassword")
+    public ResponseEntity<?> forgotPassword(@PathVariable String username) {
+        //TODO
+        return null;
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/{username}/changePassword")
     public ResponseEntity<?> changePasswordByAdmin(@PathVariable String username, @RequestBody PasswordRequest request) {

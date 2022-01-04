@@ -9,15 +9,14 @@ import com.gsoft.projectManager.appuser.RoleService;
 import com.gsoft.projectManager.appuser.Rolename;
 import com.gsoft.projectManager.exception.BadRequestException;
 import com.gsoft.projectManager.exception.ResourceNotFoundException;
+import com.gsoft.projectManager.payload.response.ConfirmationResponse;
 import com.gsoft.projectManager.registration.token.ConfirmationToken;
 import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import lombok.AllArgsConstructor;
 
@@ -35,7 +34,7 @@ public class RegistrationService {
         boolean isEmailValid = emailValidator.test(request.getEmail());
 
         if (!isEmailValid) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email not valid");
+            throw new BadRequestException("Email not valid");
         }
 
         return appUserService.signUpUser(
@@ -52,20 +51,19 @@ public class RegistrationService {
     }
 
     @Transactional
-    public String confirmToken(String token) {
+    public ConfirmationResponse confirmToken(String token) {
         String EMAIL_IS_ALREADY_VERIFIED_MSG = "%s email already verified with %s username";
         ConfirmationToken confirmationToken = confirmationTokenService.getToken(token)
                 .orElseThrow(() ->
-                        new BadRequestException("Token not found"));
+                        new ResourceNotFoundException("Token not found"));
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new ResponseStatusException(
-                    HttpStatus.ALREADY_REPORTED,
+            throw new BadRequestException(
                     String.format(EMAIL_IS_ALREADY_VERIFIED_MSG, confirmationToken.getAppUser().getEmail(), confirmationToken.getAppUser().getUsername())
             );
         }
         LocalDateTime expiredAt = confirmationToken.getExpiredAt();
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "token Expired");
+            throw new BadRequestException("token Expired");
         }
         confirmationTokenService.setConfirmedAt(token);
         Boolean isAppUserEnabled = appUserService.enableAppUser(
@@ -73,9 +71,9 @@ public class RegistrationService {
         );
         if (isAppUserEnabled) {
             LOGGER.info(confirmationToken.getAppUser().getEmail() + " is verified.");
-            return "Your email is Verified.";
+            return new ConfirmationResponse(true, "Your email is Verified.");
         }
-        return "Your email cannot be verified";
+        return new ConfirmationResponse(false, "Your email cannot be verified");
     }
 
 }

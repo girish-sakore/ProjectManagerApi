@@ -17,7 +17,6 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService, U
     public UserDetails loadUserByUsername(String emailOrUsername) throws UsernameNotFoundException {
         Optional<AppUser> optionalUser = appUserRepository.findByUsernameOrEmail(emailOrUsername, emailOrUsername);
         if(optionalUser.isPresent()) return UserPrincipal.create(optionalUser.get());
-        String USER_NOT_FOUND_MSG = "User %s not found";
-        throw new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, emailOrUsername));
+        throw new UsernameNotFoundException(emailOrUsername);
     }
 }

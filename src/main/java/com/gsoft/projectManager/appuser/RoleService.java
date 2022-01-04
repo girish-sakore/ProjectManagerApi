@@ -2,6 +2,8 @@ package com.gsoft.projectManager.appuser;
 
 import java.util.Optional;
 
+import com.gsoft.projectManager.exception.BadRequestException;
+import com.gsoft.projectManager.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,13 +25,13 @@ public class RoleService {
     }
 
     public Role findRoleByName(Rolename name){
-        return roleRepository.findByName(name).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found!"));
+        return roleRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Role not found!"));
     }
 
     public Role addRole(Rolename name){
         boolean isRolePresent = roleRepository.findByName(name).isPresent();
         if(isRolePresent){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Role already exists!");
+            throw new BadRequestException("Role already exists!");
         }
         return roleRepository.save(new Role(name));
     }

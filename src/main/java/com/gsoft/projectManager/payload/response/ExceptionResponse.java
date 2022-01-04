@@ -1,13 +1,16 @@
 package com.gsoft.projectManager.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.context.request.WebRequest;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@JsonPropertyOrder({"error", "message", "time-stamp", "source-uri"})
 @Data
 public class ExceptionResponse implements Serializable {
     @JsonIgnore
@@ -22,10 +25,15 @@ public class ExceptionResponse implements Serializable {
     @JsonProperty("error")
     private HttpStatus status;
 
+    @JsonProperty("source-uri")
+    private String uri;
+
     public ExceptionResponse() {}
 
-    public ExceptionResponse(String message, HttpStatus httpStatus) {
+    public ExceptionResponse(String message, HttpStatus httpStatus, WebRequest request) {
         this.message = message;
         this.status = httpStatus;
+        this.uri = request.getDescription(false).substring(4);
+        this.timeStamp = LocalDateTime.now();
     }
 }
