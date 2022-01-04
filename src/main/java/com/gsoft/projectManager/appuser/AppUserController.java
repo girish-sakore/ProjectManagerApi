@@ -1,6 +1,6 @@
 package com.gsoft.projectManager.appuser;
 
-import com.gsoft.projectManager.payload.AppUserProfile;
+import com.gsoft.projectManager.payload.response.AppUserProfile;
 import com.gsoft.projectManager.payload.request.PasswordRequest;
 import com.gsoft.projectManager.registration.RegistrationRequest;
 
@@ -72,6 +72,13 @@ public class AppUserController {
     public ResponseEntity<?> changePassword(@PathVariable String username, @RequestBody PasswordRequest request) {
         Boolean response = appUserService.updateAppUserPassword(username, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PreAuthorize("principal == #username")
+    @PostMapping("/{username}/forgotPassword")
+    public ResponseEntity<?> forgotPassword(@PathVariable String username) {
+        //TODO
+        return null;
     }
 
     @PreAuthorize("hasRole('ADMIN')")

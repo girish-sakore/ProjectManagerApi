@@ -1,4 +1,4 @@
-package com.gsoft.projectManager.payload;
+package com.gsoft.projectManager.payload.response;
 
 import com.gsoft.projectManager.appuser.Role;
 import lombok.AllArgsConstructor;

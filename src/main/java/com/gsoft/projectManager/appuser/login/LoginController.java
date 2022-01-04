@@ -5,19 +5,18 @@ import java.util.Optional;
 import com.gsoft.projectManager.appuser.AppUser;
 import com.gsoft.projectManager.appuser.AppUserRepository;
 import com.gsoft.projectManager.appuser.AppUserService;
+import com.gsoft.projectManager.exception.BadRequestException;
 import com.gsoft.projectManager.payload.request.LoginDetails;
 import com.gsoft.projectManager.payload.response.TokenDetails;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import lombok.AllArgsConstructor;
 
@@ -38,10 +37,10 @@ public class LoginController {
         Optional<AppUser> optionalUser = appUserRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
 
         if(optionalUser.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid username or email!");
+            throw new BadRequestException("Invalid username or email!");
         }
         else if(!passwordEncoder.matches(password, optionalUser.get().getPassword())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid password!");
+            throw new BadRequestException("Invalid password!");
         }
         Authentication authentication = appUserService.loginUser(optionalUser);
         TokenDetails tokenDetails = new TokenDetails(jwtTokenProvider.generateJwtToken(authentication));

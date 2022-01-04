@@ -2,6 +2,9 @@ package com.gsoft.projectManager.registration;
 
 import com.gsoft.projectManager.appuser.AppUser;
 
+import com.gsoft.projectManager.payload.response.ConfirmationResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 class RegisterUserController {
     private final RegistrationService registrationService;
+    private final Logger LOGGER = LoggerFactory.getLogger(RegisterUserController.class);
 
     @PostMapping
     public AppUser register(@RequestBody RegistrationRequest request) {
@@ -26,6 +30,7 @@ class RegisterUserController {
 
     @GetMapping(path = "confirm")
     public ResponseEntity<?> verifyToken(@RequestParam("token") String token) {
-        return new ResponseEntity<>(registrationService.confirmToken(token), HttpStatus.OK);
+        ConfirmationResponse response = registrationService.confirmToken(token);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

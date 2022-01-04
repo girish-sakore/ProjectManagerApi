@@ -30,12 +30,15 @@ import lombok.AllArgsConstructor;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        String[] permittedEndpoints = new String[]{
+                "/api/v*/register/**",
+                "/api/v*/login",
+                "/api/v*/appUsers/checkUsernameAvailability"
+        };
         http.cors().and().csrf().disable()
             .exceptionHandling()
             .authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -44,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-                .antMatchers("/api/v*/register/**", "/api/v*/login", "/api/v*/appUsers/checkUsernameAvailability")
+                .antMatchers(permittedEndpoints)
                 .permitAll()
             .anyRequest()
             .authenticated();    
