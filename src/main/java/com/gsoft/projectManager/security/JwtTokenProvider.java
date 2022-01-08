@@ -1,8 +1,8 @@
-package com.gsoft.projectManager.appuser.login;
+package com.gsoft.projectManager.security;
 
 import java.util.Date;
-import com.gsoft.projectManager.appuser.CustomUserDetailsService;
-import com.gsoft.projectManager.appuser.UserPrincipal;
+import com.gsoft.projectManager.service.CustomUserDetailsService;
+import com.gsoft.projectManager.model.UserPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

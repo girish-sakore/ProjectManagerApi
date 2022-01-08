@@ -1,17 +1,16 @@
-package com.gsoft.projectManager.registration;
+package com.gsoft.projectManager.service;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-import com.gsoft.projectManager.appuser.AppUser;
-import com.gsoft.projectManager.appuser.AppUserService;
-import com.gsoft.projectManager.appuser.RoleService;
-import com.gsoft.projectManager.appuser.Rolename;
+import com.gsoft.projectManager.model.AppUser;
+import com.gsoft.projectManager.payload.request.RegistrationRequest;
+import com.gsoft.projectManager.utils.EmailValidator;
+import com.gsoft.projectManager.model.Rolename;
 import com.gsoft.projectManager.exception.BadRequestException;
 import com.gsoft.projectManager.exception.ResourceNotFoundException;
 import com.gsoft.projectManager.payload.response.ConfirmationResponse;
-import com.gsoft.projectManager.registration.token.ConfirmationToken;
-import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
+import com.gsoft.projectManager.model.ConfirmationToken;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

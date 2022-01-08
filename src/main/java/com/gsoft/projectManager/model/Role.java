@@ -1,4 +1,4 @@
-package com.gsoft.projectManager.appuser;
+package com.gsoft.projectManager.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

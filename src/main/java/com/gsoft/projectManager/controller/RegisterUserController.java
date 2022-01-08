@@ -1,8 +1,10 @@
-package com.gsoft.projectManager.registration;
+package com.gsoft.projectManager.controller;
 
-import com.gsoft.projectManager.appuser.AppUser;
+import com.gsoft.projectManager.model.AppUser;
 
 import com.gsoft.projectManager.payload.response.ConfirmationResponse;
+import com.gsoft.projectManager.payload.request.RegistrationRequest;
+import com.gsoft.projectManager.service.RegistrationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

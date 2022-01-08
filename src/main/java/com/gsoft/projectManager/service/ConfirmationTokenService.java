@@ -1,15 +1,15 @@
-package com.gsoft.projectManager.registration.token;
+package com.gsoft.projectManager.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import com.gsoft.projectManager.appuser.AppUser;
-import com.gsoft.projectManager.appuser.AppUserRepository;
+import com.gsoft.projectManager.model.AppUser;
+import com.gsoft.projectManager.repository.AppUserRepository;
 
 import com.gsoft.projectManager.exception.BadRequestException;
-import org.springframework.http.HttpStatus;
+import com.gsoft.projectManager.model.ConfirmationToken;
+import com.gsoft.projectManager.repository.ConfirmationTokenRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import lombok.AllArgsConstructor;
 

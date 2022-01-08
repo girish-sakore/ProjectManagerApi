@@ -1,8 +1,9 @@
-package com.gsoft.projectManager.appuser;
+package com.gsoft.projectManager.repository;
 
 import java.util.List;
 import java.util.Optional;
 
+import com.gsoft.projectManager.model.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

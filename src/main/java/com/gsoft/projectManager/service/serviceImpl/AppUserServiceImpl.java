@@ -1,4 +1,4 @@
-package com.gsoft.projectManager.appuser;
+package com.gsoft.projectManager.service.serviceImpl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,13 +9,19 @@ import java.util.UUID;
 import com.gsoft.projectManager.exception.*;
 import com.gsoft.projectManager.mailer.EmailSender;
 import com.gsoft.projectManager.mailer.EmailService;
+import com.gsoft.projectManager.model.AppUser;
+import com.gsoft.projectManager.model.Role;
+import com.gsoft.projectManager.model.UserPrincipal;
 import com.gsoft.projectManager.payload.response.AppUserProfile;
 import com.gsoft.projectManager.payload.request.PasswordRequest;
-import com.gsoft.projectManager.registration.RegistrationRequest;
-import com.gsoft.projectManager.registration.token.ConfirmationToken;
-import com.gsoft.projectManager.registration.token.ConfirmationTokenRepository;
-import com.gsoft.projectManager.registration.token.ConfirmationTokenService;
+import com.gsoft.projectManager.payload.request.RegistrationRequest;
+import com.gsoft.projectManager.model.ConfirmationToken;
+import com.gsoft.projectManager.repository.AppUserRepository;
+import com.gsoft.projectManager.repository.ConfirmationTokenRepository;
+import com.gsoft.projectManager.service.ConfirmationTokenService;
 
+import com.gsoft.projectManager.service.AppUserService;
+import com.gsoft.projectManager.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;

@@ -1,8 +1,10 @@
-package com.gsoft.projectManager.appuser;
+package com.gsoft.projectManager.service;
 
+import com.gsoft.projectManager.model.AppUser;
+import com.gsoft.projectManager.model.Role;
 import com.gsoft.projectManager.payload.response.AppUserProfile;
 import com.gsoft.projectManager.payload.request.PasswordRequest;
-import com.gsoft.projectManager.registration.RegistrationRequest;
+import com.gsoft.projectManager.payload.request.RegistrationRequest;
 
 import java.util.List;
 import java.util.Optional;

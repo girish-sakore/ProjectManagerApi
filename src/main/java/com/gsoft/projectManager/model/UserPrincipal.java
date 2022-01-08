@@ -1,4 +1,4 @@
-package com.gsoft.projectManager.appuser;
+package com.gsoft.projectManager.model;
 
 import java.util.ArrayList;
 import java.util.Collection;

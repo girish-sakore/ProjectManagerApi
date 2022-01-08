@@ -1,10 +1,11 @@
-package com.gsoft.projectManager.appuser.login;
+package com.gsoft.projectManager.controller;
 
 import java.util.Optional;
 
-import com.gsoft.projectManager.appuser.AppUser;
-import com.gsoft.projectManager.appuser.AppUserRepository;
-import com.gsoft.projectManager.appuser.AppUserService;
+import com.gsoft.projectManager.model.AppUser;
+import com.gsoft.projectManager.repository.AppUserRepository;
+import com.gsoft.projectManager.security.JwtTokenProvider;
+import com.gsoft.projectManager.service.AppUserService;
 import com.gsoft.projectManager.exception.BadRequestException;
 import com.gsoft.projectManager.payload.request.LoginDetails;
 import com.gsoft.projectManager.payload.response.TokenDetails;

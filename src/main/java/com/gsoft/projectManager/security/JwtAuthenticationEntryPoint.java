@@ -1,4 +1,4 @@
-package com.gsoft.projectManager.appuser.login;
+package com.gsoft.projectManager.security;
 
 import java.io.IOException;
 

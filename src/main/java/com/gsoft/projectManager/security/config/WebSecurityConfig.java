@@ -1,10 +1,9 @@
 package com.gsoft.projectManager.security.config;
 
-import com.gsoft.projectManager.appuser.CustomUserDetailsServiceImpl;
-import com.gsoft.projectManager.appuser.login.JwtAuthenticationEntryPoint;
-import com.gsoft.projectManager.appuser.login.JwtAuthenticationFilter;
+import com.gsoft.projectManager.service.serviceImpl.CustomUserDetailsServiceImpl;
+import com.gsoft.projectManager.security.JwtAuthenticationEntryPoint;
+import com.gsoft.projectManager.security.JwtAuthenticationFilter;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;

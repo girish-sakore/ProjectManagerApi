@@ -1,5 +1,9 @@
-package com.gsoft.projectManager.appuser;
+package com.gsoft.projectManager.service.serviceImpl;
 
+import com.gsoft.projectManager.model.AppUser;
+import com.gsoft.projectManager.repository.AppUserRepository;
+import com.gsoft.projectManager.model.UserPrincipal;
+import com.gsoft.projectManager.service.CustomUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -2,8 +2,8 @@ package com.gsoft.projectManager;
 
 import java.util.EnumSet;
 
-import com.gsoft.projectManager.appuser.RoleService;
-import com.gsoft.projectManager.appuser.Rolename;
+import com.gsoft.projectManager.service.RoleService;
+import com.gsoft.projectManager.model.Rolename;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

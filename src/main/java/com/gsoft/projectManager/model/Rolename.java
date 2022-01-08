@@ -1,4 +1,4 @@
-package com.gsoft.projectManager.appuser;
+package com.gsoft.projectManager.model;
 
 public enum Rolename {
     ROLE_ADMIN,
