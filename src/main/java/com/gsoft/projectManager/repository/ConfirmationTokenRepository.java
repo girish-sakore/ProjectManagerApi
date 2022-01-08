@@ -1,6 +1,7 @@
-package com.gsoft.projectManager.registration.token;
+package com.gsoft.projectManager.repository;
 
-import com.gsoft.projectManager.appuser.AppUser;
+import com.gsoft.projectManager.model.AppUser;
+import com.gsoft.projectManager.model.ConfirmationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

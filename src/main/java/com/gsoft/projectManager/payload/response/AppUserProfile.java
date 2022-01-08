@@ -1,6 +1,6 @@
 package com.gsoft.projectManager.payload.response;
 
-import com.gsoft.projectManager.appuser.Role;
+import com.gsoft.projectManager.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

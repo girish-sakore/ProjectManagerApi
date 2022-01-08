@@ -1,4 +1,4 @@
-package com.gsoft.projectManager.appuser.login;
+package com.gsoft.projectManager.security;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -9,9 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.gsoft.projectManager.appuser.AppUser;
-import com.gsoft.projectManager.appuser.AppUserRepository;
-import com.gsoft.projectManager.appuser.AppUserService;
+import com.gsoft.projectManager.model.AppUser;
+import com.gsoft.projectManager.repository.AppUserRepository;
+import com.gsoft.projectManager.service.AppUserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.gsoft.projectManager.registration;
+package com.gsoft.projectManager.utils;
 
 import java.util.function.Predicate;
 

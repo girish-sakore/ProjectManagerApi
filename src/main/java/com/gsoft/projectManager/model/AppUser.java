@@ -1,4 +1,4 @@
-package com.gsoft.projectManager.appuser;
+package com.gsoft.projectManager.model;
 
 
 import java.util.List;

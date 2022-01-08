@@ -1,6 +1,5 @@
 package com.gsoft.projectManager.exception;
 
-import com.gsoft.projectManager.payload.response.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

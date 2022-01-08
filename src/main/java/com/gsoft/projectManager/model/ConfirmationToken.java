@@ -1,6 +1,5 @@
-package com.gsoft.projectManager.registration.token;
+package com.gsoft.projectManager.model;
 
-import com.gsoft.projectManager.appuser.AppUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

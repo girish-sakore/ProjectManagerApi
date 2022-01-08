@@ -1,12 +1,13 @@
-package com.gsoft.projectManager.appuser;
+package com.gsoft.projectManager.service;
 
 import java.util.Optional;
 
+import com.gsoft.projectManager.model.Role;
+import com.gsoft.projectManager.model.Rolename;
 import com.gsoft.projectManager.exception.BadRequestException;
 import com.gsoft.projectManager.exception.ResourceNotFoundException;
-import org.springframework.http.HttpStatus;
+import com.gsoft.projectManager.repository.RoleRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class RoleService {

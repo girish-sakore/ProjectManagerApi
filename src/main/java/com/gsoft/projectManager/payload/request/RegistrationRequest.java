@@ -1,4 +1,4 @@
-package com.gsoft.projectManager.registration;
+package com.gsoft.projectManager.payload.request;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

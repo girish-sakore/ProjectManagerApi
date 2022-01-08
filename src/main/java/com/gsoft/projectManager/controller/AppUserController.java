@@ -1,8 +1,11 @@
-package com.gsoft.projectManager.appuser;
+package com.gsoft.projectManager.controller;
 
+import com.gsoft.projectManager.model.AppUser;
+import com.gsoft.projectManager.service.AppUserService;
+import com.gsoft.projectManager.model.Role;
 import com.gsoft.projectManager.payload.response.AppUserProfile;
 import com.gsoft.projectManager.payload.request.PasswordRequest;
-import com.gsoft.projectManager.registration.RegistrationRequest;
+import com.gsoft.projectManager.payload.request.RegistrationRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
